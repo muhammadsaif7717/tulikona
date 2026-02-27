@@ -21,7 +21,7 @@ export const connectDb = async () => {
       },
     })
 
-    const db = client.db('DeveloperSaif')
+    const db = client.db('Tulikona')
     console.log('Connected to MongoDB successfully')
     return db
   } catch (err) {
