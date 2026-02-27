@@ -1,15 +1,15 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ServerApiVersion } from 'mongodb'
 
 export const connectDb = async () => {
-  let db;
+  let db
   if (db) {
-    return db;
+    return db
   }
 
-  const uri = process.env.NEXT_PUBLIC_MONGODB_URI;
+  const uri = process.env.NEXT_PUBLIC_MONGODB_URI
 
   if (!uri) {
-    throw new Error('Missing MongoDB URI');
+    throw new Error('Missing MongoDB URI')
   }
 
   try {
@@ -19,12 +19,12 @@ export const connectDb = async () => {
         strict: true,
         deprecationErrors: true,
       },
-    });
+    })
 
-    const db = client.db('DeveloperSaif');
-    console.log('Connected to MongoDB successfully');
-    return db;
+    const db = client.db('DeveloperSaif')
+    console.log('Connected to MongoDB successfully')
+    return db
   } catch (err) {
-    throw new Error(`Failed to connect to MongoDB ${err}`);
+    throw new Error(`Failed to connect to MongoDB ${err}`)
   }
-};
+}
