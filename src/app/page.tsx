@@ -1,7 +1,3 @@
-import React from 'react'
-
 export default function page() {
-  return (
-    <div>page</div>
-  )
+  return <div className="min-h-screen pt-14 lg:pt-20">page</div>
 }
