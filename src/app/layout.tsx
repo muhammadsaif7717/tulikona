@@ -6,6 +6,7 @@ import Footer from '@/components/shared/Footer'
 import AuthProvider from '@/providers/AuthProvider'
 import ThemeProvider from '@/providers/ThemeProvider'
 import TanstackProvider from '@/providers/TanstackProvider'
+import SaearchProvider from '@/providers/SaearchProvider'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,11 +35,13 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <TanstackProvider>
-            <AuthProvider>
-              <Navber />
-              {children}
-              <Footer />
-            </AuthProvider>
+            <SaearchProvider>
+              <AuthProvider>
+                <Navber />
+                {children}
+                <Footer />
+              </AuthProvider>
+            </SaearchProvider>
           </TanstackProvider>
         </ThemeProvider>
       </body>

@@ -17,20 +17,28 @@ import { HiOutlineShoppingCart } from 'react-icons/hi'
 import { FiHeart, FiSearch } from 'react-icons/fi'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { LogIn, Menu, X } from 'lucide-react'
+import { LogIn, Menu, Search, X } from 'lucide-react'
+import { useSearch } from '@/hooks/useSearch'
 
 export default function Navbar() {
   const { data: session } = useSession()
+  const router = useRouter()
   const pathName = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
-  console.log(session?.user.image)
+  const { search, setSearch } = useSearch()
+  const [inputValue, setInputValue] = useState('')
 
   const isDashboard = pathName.startsWith('/dashboard')
   const isAuth = pathName.startsWith('/auth')
   if (isAuth || isDashboard) return null
 
+  const handleSearch = () => {
+    setSearch(inputValue)
+  }
+
+  console.log(search)
   return (
     <>
       <nav className="fixed z-50 w-full">
@@ -53,12 +61,18 @@ export default function Navbar() {
               <div className="hidden w-full justify-center lg:flex">
                 <div className="relative flex w-1/2 items-center justify-center">
                   <Input
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSearch()
+                    }}
                     className="focus:border-cprimary h-12 border-transparent bg-[#f8f8f8] p-5 pr-28 placeholder:text-[16px]"
                     placeholder="Keyword here..."
                   />
                   <Button
                     variant={'ghost'}
                     className="absolute right-5 flex cursor-pointer gap-2 hover:bg-transparent"
+                    onClick={handleSearch}
                   >
                     <FiSearch className="text-2xl" />
                     <span className="font-semibold">Search</span>
@@ -180,33 +194,56 @@ export default function Navbar() {
 
         {/* Mobile Dropdown Menu */}
         {menuOpen && (
-          <div className="bg-cfg shadow-md lg:hidden">
+          <div className="rounded-2xl bg-gray-100 shadow-lg lg:hidden">
             <div className="mx-auto max-w-screen-2xl space-y-4 px-4 py-4">
               {/* Mobile Search */}
               <div className="relative flex items-center">
                 <Input
-                  className="focus:border-cprimary h-11 w-full border-transparent bg-[#f8f8f8] p-4 pr-24 placeholder:text-[15px]"
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearch()
+                      setMenuOpen(false)
+                    }
+                  }}
+                  className="focus:border-cprimary h-11 w-full border-transparent bg-white p-4 pr-24 placeholder:text-[15px]"
                   placeholder="Keyword here..."
                 />
                 <Button
-                  variant={'ghost'}
+                  variant="ghost"
                   className="absolute right-3 flex cursor-pointer gap-1 hover:bg-transparent"
+                  onClick={() => {
+                    handleSearch()
+                    setMenuOpen(false)
+                  }}
                 >
-                  <FiSearch className="text-xl" />
-                  <span className="text-sm font-semibold">Search</span>
+                  <Search />
                 </Button>
               </div>
 
               {/* Mobile Menu Items */}
               <div className="flex flex-col gap-1">
                 {/* Favourites */}
-                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-gray-100">
+                <button
+                  onClick={() => {
+                    setMenuOpen(false)
+                    router.push('/')
+                  }}
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-gray-200"
+                >
                   <FiHeart className="text-xl" />
                   <span className="text-[15px]">Favourites</span>
                 </button>
 
                 {/* Cart */}
-                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-gray-100">
+                <button
+                  onClick={() => {
+                    setMenuOpen(false)
+                    router.push('/')
+                  }}
+                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left hover:bg-gray-200"
+                >
                   <HiOutlineShoppingCart className="text-xl" />
                   <span className="text-[15px]">Cart</span>
                 </button>
@@ -249,7 +286,7 @@ export default function Navbar() {
                   <Link
                     href={'/auth/sign-in'}
                     onClick={() => setMenuOpen(false)}
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-100"
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2 hover:bg-gray-200"
                   >
                     <LogIn className="text-xl" />
                     <span className="text-[15px]">Login</span>
